@@ -28,6 +28,6 @@ class LoginController extends Controller
         }
 
         //credenciales correctas
-        return redirect()->route('dashboard',auth()->user()->username);
+        return redirect()->route('dashboard');
     }
 }
