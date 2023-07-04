@@ -69,3 +69,6 @@ Route::delete('/Facturas/{id}', [FacturaController::class, 'delete'])->name('fac
 
 //ruta para enviar datos al servidor
 Route::post('/pdf', [FacturaController::class,'store_pdf'])->name('pdf.store');
+
+//ruta para enviar datos al servidor
+Route::post('/xml', [FacturaController::class,'store_xml'])->name('xml.store');

@@ -20,7 +20,7 @@ return new class extends Migration
 
             //agregamos la empresa receptora relacionada 
             $table->foreignId('receptora_id')->constrained();
-            //agregamos la empresa receptora relacionada 
+            //agregamos la empresa emisora relacionada 
             $table->foreignId('emisora_id')->constrained();
         });
     }

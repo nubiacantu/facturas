@@ -13,7 +13,17 @@
         <a href="{{route('emisora.create')}}" class="ml-auto mb-3 bg-indigo-800 hover:bg-indigo-700 transition-colors cursor-pointer font-bold px-3 py-2 text-white rounded-xl">
             Agregar Empresa Emisora
         </a>
-        <table class="table-auto ">
+        <!--botones de exportar que llaman al js de app-->
+        <div class="my-4 flex justify-end space-x-2">
+            <button onclick="exportToPDF('empresas_emisoras')" class="inline-block px-2 py-1 rounded-lg font-bold text-sm text-white bg-red-600 hover:bg-red-700 transition-colors">
+                Exportar a PDF
+            </button>
+
+            <button onclick="exportToExcel('empresas_emisoras')" class="inline-block px-2 py-1 rounded-lg font-bold text-sm text-white bg-green-600 hover:bg-green-700 transition-colors">
+                Exportar a Excel
+            </button>
+        </div>
+        <table class="table-auto " id="maintable">
             <thead>
                 <tr class="bg-indigo-300 text-black">
                     <th class="px-4 py-4 border border-blue-400">ID</th>
@@ -35,7 +45,7 @@
                         <td class="px-4 py-2 border border-blue-300">{{ $emisora->razon }}</td>
                         <td class="px-4 py-2 border border-blue-300">{{ $emisora->email }}</td>
                         <td class="px-4 py-2 border border-blue-300">{{ $emisora->rfc }}</td>
-                        <td class=" px-3 py-2"><form action="{{route('emisora.delete', $emisora->id)}}" method="POST">
+                        <td class=" px-3 py-2 exclude-column"><form action="{{route('emisora.delete', $emisora->id)}}" method="POST">
                             @method('delete')
                             @csrf
                             <button type="submit" class="inline-block px-2 py-2 rounded-lg font-bold text-white bg-red-600 hover:bg-red-700 transition-colors">

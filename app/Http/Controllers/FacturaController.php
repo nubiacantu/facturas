@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Factura;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FacturaController extends Controller
 {
@@ -26,17 +27,67 @@ class FacturaController extends Controller
     
     public function store_pdf(Request $request)
     {
-        // Identificar el archivo que se sube en dropzone
-        $archivo = $request->file('file');
+        $pdf = $request->file('file');
+        // Se obtiene el nombre del archivo
+        
+        $nombrepdf = Str::uuid() . ".". $pdf->extension();
+        //Se obtiene el path en donde queremos almecenar el archivo
+        $pdfPath = public_path('uploads_pdf') . '/' . $nombrepdf;
+        //Con la creación del archivo, se coloca en la ruta establecida
+        copy($pdf,$pdfPath);
 
-        // Generar un nombre único para el archivo PDF
-        $nombreArchivo = Str::uuid() . '.' . $archivo->getClientOriginalExtension();
+        return response()->json([
+            'pdf' => $nombrepdf
+        ]);
+        
+    }
 
-        // Mover el archivo a una ubicación en el servidor
-        $rutaArchivo = 'uploads_pdf/' . $nombreArchivo;
-        Storage::disk('public')->put($rutaArchivo, file_get_contents($archivo));
+    public function store_xml(Request $request)
+    {
+        $xml = $request->file('file');
+        // Se obtiene el nombre original del archivo
+        $nombrexml = Str::uuid() . ".xml";
 
-        // Devolver la ruta del archivo guardado
-        return response()->json(['archivo' => $rutaArchivo]);
+        //Se obtiene el path en donde queremos almecenar el archivo
+        $xmlPath = public_path('uploads_xml') . '/' . $nombrexml;
+        //Con la creación del archivo, se coloca en la ruta establecida
+        copy($xml,$xmlPath);
+        
+        return response()->json([
+            'xml' => $nombrexml
+        ]);
+        
+    }
+
+    public function store(Request $request) {
+        //validaciones del formulario de registros
+        $this->validate($request,[
+            //Reglas de validacion 
+            'pdf' => 'required',
+            'xml' => 'required',
+        ]);
+
+        //guradra los campos en el modelo posts
+        /*posts::create([
+            'titulo'=>$request->titulo,
+            'descripcion'=>$request->descripcion,
+            'imagen'=>$request->imagen,
+            //identificamos el usuario autenticado
+            'user_id'=>auth()->user()->id,
+
+            
+        ]);*/
+
+        //guardar registro con relaciones(E-R)
+        //"post" es el nombre de la relacion
+        $request->user()->post()->create([
+            'pdf'=>$request->pdf,
+            'xml'=>$request->xml,
+        ]);
+
+        //redireccionamiento
+        return redirect()->route('facturas.index',auth()->user()->username);
+
+        
     }
 }

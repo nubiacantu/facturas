@@ -1,40 +1,73 @@
-import Dropzone from "dropzone"
+import Dropzone from 'dropzone';
+
 Dropzone.autoDiscover = false;
-const dropzone = new Dropzone('#dropzone', {
-  dictDefaultMessage: 'Sube un PDF aquí',
-  acceptedFiles: ".pdf",
-  addRemoveLinks: true,
-  dictRemoveFile: "<button type='button' class='bg-green-700 hover:bg-emerald-600 transition-colors cursor-pointer uppercase font-bold p-3 text-white rounded-lg'>Borrar archivo</button>",
-  maxFiles: 1,
-  uploadMultiple: false,
-  // Trabajando con imagen en el contenedor de Dropzone
-  init: function () {
-    if (document.querySelector('[name="pdf"]').value.trim()) {
-      const pdf_publicado = {};
-      pdf_publicado.size = 1234;
-      pdf_publicado.name = document.querySelector('[name="pdf"]').value;
-      this.options.addedfile.call(this, pdf_publicado);
-      this.options.thumbnail.call(
-        this,
-        pdf_publicado.name,
-        '/uploads_pdf/${pdf_publicado.name}'
-      );
-      pdf_publicado.previewElement.classList.add(
-        "dz-success",
-        "dz-complete"
-      );
+// Configuración del dropzone
+const dropzonePDF = new Dropzone('#dropzone', {
+    dictDefaultMessage: 'Sube tu factura en PDF aquí',
+    acceptedFiles: '.pdf',
+    addRemoveLinks: true,
+    dictRemoveFile: 'Borrar Archivo',
+    maxFiles: 1,
+    uploadMultiple: false,
+
+    init: function () {
+        // En caso que tenga value, lo tomará para llenar los atributos de dropzone
+        if (document.querySelector('[name="pdf"]').value.trim()) {
+            const pdfPublicada = {};
+
+            pdfPublicada.size = 1234;
+            pdfPublicada.name = document.querySelector('[name="pdf"]').value;
+
+            this.options.addedfile.call(this, pdfPublicada);
+            this.options.thumbnail.call(this, pdfPublicada, `/uploads_pdf/${pdfPublicada.name}`);
+
+            pdfPublicada.previewElement.classList.add('dz-success', 'dz-complete');
+        }
     }
-  },
-  // Evento de envío de archivo correcto
-  success: function (file, response) {
+});
+//Funcion para procesar la subida del archivo XML
+const dropzoneXML = new Dropzone('#dropzone2', {
+    dictDefaultMessage: 'Sube tu factura en XML aqui',
+    acceptedFiles: '.xml',
+    addRemoveLinks: true,
+    dictRemoveFile: 'Borrar Archivo',
+    maxFiles: 1,
+    uploadMultiple: false,
+
+    init: function () {
+        // En caso que tenga value, lo tomará para llenar los atributos de dropzone
+        if (document.querySelector('[name="xml"]').value.trim()) {
+            const xmlPublicada = {};
+
+            xmlPublicada.size = 1234;
+            xmlPublicada.name = document.querySelector('[name="xml"]').value;
+
+            this.options.addedfile.call(this, xmlPublicada);
+            this.options.thumbnail.call(this, xmlPublicada, `/uploads_xml/${xmlPublicada.name}`);
+
+            xmlPublicada.previewElement.classList.add('dz-success', 'dz-complete');
+        }
+    }
+});
+
+dropzonePDF.on('success', function (file, response) {
+    // Asigna el value de la imagen (nombre) en el input oculto de create.blade.php
+    console.log(response);
     document.querySelector('[name="pdf"]').value = response.pdf;
-  },
-  // Evento de error de envío
-  error: function (file, message) {
-    console.log(message);
-  },
-  // Evento de eliminación de archivo
-  removedfile: function () {
-    document.querySelector('[name="pdf"]').value = "";
-  }
+});
+
+dropzonePDF.on('removedfile', function () {
+    // Para resetear el valor cuando se elimine la imagen
+    document.querySelector('[name="pdf"]').value = '';
+});
+
+dropzoneXML.on('success', function (file, response) {
+    // Asigna el value de la imagen (nombre) en el input oculto de create.blade.php
+    console.log(response);
+    document.querySelector('[name="xml"]').value = response.xml;
+});
+
+dropzoneXML.on('removedfile', function () {
+    // Para resetear el valor cuando se elimine la imagen
+    document.querySelector('[name="xml"]').value = '';
 });

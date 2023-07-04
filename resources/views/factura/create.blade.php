@@ -13,8 +13,13 @@
     <img class="mx-auto h-44 w-auto" src="{{asset('img/factura.png')}}" alt="User">
   </div>
   <div class="mt-2 px-4 py-4">
-  <div class="md:w-full px-10 p-10 ">
+    <div class="md:w-full px-10 p-10 ">
         <form action="{{route('pdf.store')}}" method="post" enctype="multipart/form-data" id="dropzone" class="dropzone border-dashed border-2 w-full h-96 rounded shadow-xl flex flex-col justify-center items-center  bg-white">
+            @csrf
+        </form> 
+    </div>
+    <div class="md:w-full px-10 p-10 ">
+        <form action="{{route('xml.store')}}" method="post" enctype="multipart/form-data" id="dropzone2" class="dropzone border-dashed border-2 w-full h-96 rounded shadow-xl flex flex-col justify-center items-center  bg-white">
             @csrf
         </form> 
     </div>
@@ -25,7 +30,21 @@
               {{session('agregada')}}
         </div>
       @endif  
-      
+      <!--Agregar campo oculto para guardar el valor de la imagen-->
+      <div class="mb-5">
+          <input type="hidden" name="pdf"  value="{{old('pdf')}}">
+          @error('pdf')
+              <p class="bg-red-500 text-white my-2 rounded-lg text-sm p-2 text-center">{{$message}} </p>
+          @enderror
+      </div>
+
+      <!--Agregar campo oculto para guardar el valor de la imagen-->
+      <div class="mb-5">
+          <input type="hidden" name="xml"  value="{{old('xml')}}">
+          @error('xml')
+              <p class="bg-red-500 text-white my-2 rounded-lg text-sm p-2 text-center">{{$message}} </p>
+          @enderror
+      </div>
 
       <div class="flex justify-center">
         <button type="submit" class="flex w-1/2 justify-center rounded-md bg-blue-800 px-3 py-1.5  font-semibold leading-6 text-white  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600  text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]">Enviar</button>
