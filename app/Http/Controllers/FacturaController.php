@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+use App\Models\Emisora;
+use App\Models\Receptora;
 class FacturaController extends Controller
 {
     public function __construct(){
@@ -17,11 +19,6 @@ class FacturaController extends Controller
     public function index() {
         $facturas = Factura::all();
         return view('factura.lista')->with(['facturas' => $facturas]);;
-    }
-    //redireccionar a vista de formulario
-    public function create()
-    {
-        return view('factura.create');
     }
 
     
@@ -58,35 +55,46 @@ class FacturaController extends Controller
         ]);
         
     }
+    public function create(){
+        // Se obtienen todas las empresas emisoras
+        $emisoras = Emisora::all();
+        // Se obtienen todas las empresas receptoras
+        $receptoras = Receptora::all();
+        // Retornar la vista para crear facturas
+        return view('factura.create', compact('emisoras','receptoras'));
+    }
 
+    //eliminar factura con un id
+    public function delete($id)
+    {
+        Factura::find($id)->delete();
+        return redirect()->back()->with('success', 'Factura eliminada correctamente');
+    }
+    
     public function store(Request $request) {
-        //validaciones del formulario de registros
-        $this->validate($request,[
-            //Reglas de validacion 
+       
+        $request->validate([
+            'emisora_id' => 'required',
+            'receptora_id' => 'required',
+            'folio' => 'required|unique:facturas|min:5',
             'pdf' => 'required',
             'xml' => 'required',
         ]);
 
-        //guradra los campos en el modelo posts
-        /*posts::create([
-            'titulo'=>$request->titulo,
-            'descripcion'=>$request->descripcion,
-            'imagen'=>$request->imagen,
-            //identificamos el usuario autenticado
-            'user_id'=>auth()->user()->id,
-
-            
-        ]);*/
-
-        //guardar registro con relaciones(E-R)
-        //"post" es el nombre de la relacion
-        $request->user()->post()->create([
-            'pdf'=>$request->pdf,
-            'xml'=>$request->xml,
+ 
+        // // Crear una nueva factura en la base de datos
+        Factura::create([
+            'emisora_id' => $request->emisora_id,
+            'receptora_id' => $request->receptora_id,
+            'folio' => $request->folio,
+            'pdf' => $request->pdf,
+            'xml' => $request->xml,
         ]);
 
+       
+
         //redireccionamiento
-        return redirect()->route('facturas.index',auth()->user()->username);
+        return redirect()->route('factura.index')->with('agregada', 'Factura agregada correctamente.');
 
         
     }

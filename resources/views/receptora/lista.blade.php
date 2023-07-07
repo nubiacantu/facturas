@@ -6,8 +6,13 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
     <div class="mx-auto flex max-w-80% flex-col shadow-lg p-8 bg-white rounded-xl">
         @if(session('success'))
-            <div class="bg-green-200 p-2 rounded-lg mb-6 text-black text-center ">
+            <div class="bg-blue-200 p-2 rounded-lg mb-6 text-black text-center ">
                 {{ session('success') }}
+            </div>
+        @endif
+        @if(session('agregada'))
+            <div class="bg-blue-200 p-2 rounded-lg mb-6 text-black text-center ">
+                {{ session('agregada') }}
             </div>
         @endif
         <a href="{{route('receptora.create')}}" class="ml-auto mb-3 bg-indigo-800 hover:bg-indigo-700 transition-colors cursor-pointer font-bold px-3 py-2 text-white rounded-xl">

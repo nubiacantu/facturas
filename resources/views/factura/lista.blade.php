@@ -6,8 +6,13 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
     <div class="mx-auto flex max-w-80% flex-col shadow-lg p-8 bg-white rounded-xl">
         @if(session('success'))
-            <div class="bg-green-200 p-2 rounded-lg mb-6 text-black text-center ">
+            <div class="bg-blue-200 p-2 rounded-lg mb-6 text-black text-center ">
                 {{ session('success') }}
+            </div>
+        @endif
+        @if(session('agregada'))
+            <div class="bg-blue-200 p-2 rounded-lg mb-6 text-black text-center ">
+                {{ session('agregada') }}
             </div>
         @endif
         <a href="{{route('factura.create')}}" class="ml-auto mb-3 bg-indigo-800 hover:bg-indigo-700 transition-colors cursor-pointer font-bold px-3 py-2 text-white rounded-xl">
@@ -43,9 +48,10 @@
                     <tr class="text-center">
                         <td class="px-4 py-2 border border-blue-300">{{ $factura->id }}</td>
                         <td class="px-4 py-2 border border-blue-300">{{ $factura->folio }}</td>
-                        <td class="px-4 py-2 border border-blue-300">{{ $factura->pdf }}</td>
-                        <td class="px-4 py-2 border border-blue-300">{{ $factura->xml }}</td>
-                        <td class=" px-3 py-2 exclude-column"><form action="" method="POST">
+                        <td class="px-4 py-2 border border-blue-300"><a style="text-decoration:underline; color:rgba(63,131,248)" href="{{asset ('uploads_pdf/'. $factura->pdf )}}" target="_blank">{{ $factura->pdf }}</a></td>
+                        <td class="px-4 py-2 border border-blue-300"><a style="text-decoration:underline; color:rgba(63,131,248)" href="{{asset ('uploads_xml/'. $factura->xml )}}" target="_blank">{{ $factura->xml }}</a></td>
+                        <td class=" px-3 py-2 exclude-column">
+                            <form action="{{route('factura.delete', $factura->id)}}" method="POST">
                             @method('delete')
                             @csrf
                             <button type="submit" class="inline-block px-2 py-2 rounded-lg font-bold text-white bg-red-600 hover:bg-red-700 transition-colors">

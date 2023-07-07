@@ -65,6 +65,9 @@ Route::post('/Facturas',[FacturaController::class,'store'])->name('factura.store
 Route::get('/Facturas/Nueva', [FacturaController::class, 'create'])->name('factura.create');
 
 //ruta para eliminar factura de un id
+Route::delete('/Factura/{id}', [FacturaController::class, 'delete'])->name('factura.delete');
+
+//ruta para eliminar factura de un id
 Route::delete('/Facturas/{id}', [FacturaController::class, 'delete'])->name('factura.delete');
 
 //ruta para enviar datos al servidor
@@ -72,3 +75,7 @@ Route::post('/pdf', [FacturaController::class,'store_pdf'])->name('pdf.store');
 
 //ruta para enviar datos al servidor
 Route::post('/xml', [FacturaController::class,'store_xml'])->name('xml.store');
+
+
+//ruta publica para el portal
+Route::get('/Consulta-factura', [PortalController::class,'index'])->name('portal.store');;

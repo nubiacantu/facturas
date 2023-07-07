@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('xml');
 
             //agregamos la empresa receptora relacionada 
-            $table->foreignId('receptora_id')->constrained();
+            $table->foreignId('receptora_id')->constrained()->onDelete('cascade');;
             //agregamos la empresa emisora relacionada 
-            $table->foreignId('emisora_id')->constrained();
+            $table->foreignId('emisora_id')->constrained()->onDelete('cascade');;
         });
     }
 
