@@ -7,6 +7,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ReceptoraController;
 use App\Http\Controllers\EmisoraController;
 use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\PortalController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -78,4 +79,10 @@ Route::post('/xml', [FacturaController::class,'store_xml'])->name('xml.store');
 
 
 //ruta publica para el portal
-Route::get('/Consulta-factura', [PortalController::class,'index'])->name('portal.store');;
+Route::get('/Consulta-factura', [PortalController::class,'index'])->name('portal.index');;
+
+//ruta para buscar lo ingresado en el portal
+Route::post('/Consulta-factura/busqueda', [PortalController::class,'buscar'])->name('portal.buscar');;
+
+//ruta para buscar lo ingresado en el portal
+Route::get('/Consulta-factura/lista', [PortalController::class, 'lista'])->name('portal.lista');
